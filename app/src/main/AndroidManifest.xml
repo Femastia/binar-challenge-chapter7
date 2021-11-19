@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BinarChallengeChapter7">
         <activity
+            android:name=".landingpage.LandingPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".splashscreen.SplashScreenActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
