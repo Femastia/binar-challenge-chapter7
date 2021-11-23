@@ -1,14 +1,16 @@
 package com.ihsan.binarchallengechapter7
 
-import android.content.Intent
 import android.os.Bundle
+import android.os.PatternMatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.ihsan.binarchallengechapter7.databinding.ActivityLoginBinding
 import com.ihsan.binarchallengechapter7.viewmodel.MainViewModel
+import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
 
@@ -24,9 +26,10 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             Log.i(TAG, "btnLogin CLicked...")
-            val username = binding.edtUsername.text.toString().trim()
-            val email = binding.edtPassword.text.toString().trim()
-            mainViewModel.userLogin(username, email)
+            val email = binding.edtEmail.text.toString().trim()
+            val password = binding.edtPassword.text.toString().trim()
+
+            mainViewModel.userLogin(email, password)
             binding.progressBar.visibility = View.VISIBLE
         }
 
@@ -35,11 +38,13 @@ class LoginActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.GONE
             Toast.makeText(this, "${it.data?.username}", Toast.LENGTH_SHORT).show()
         })
+
         //isSuccess false
         mainViewModel.unSuccessLogin.observe(this, {
             binding.progressBar.visibility = View.GONE
             Toast.makeText(this, it.errors, Toast.LENGTH_SHORT).show()
         })
+
         //isBadRequest; Input User salah format
         mainViewModel.responseBadRequest.observe(this, {
             binding.progressBar.visibility = View.GONE

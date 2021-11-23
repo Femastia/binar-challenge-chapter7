@@ -27,9 +27,9 @@ class MainViewModel: ViewModel() {
     private val _responseBadRequest = MutableLiveData<BadRequestLogin>()
     val responseBadRequest: LiveData<BadRequestLogin> = _responseBadRequest
 
-    fun userLogin(username: String, email: String) {
-        Log.i(TAG, "fun userLogin: running... username =$username email =$email")
-        ApiClient.getInstanceApiService().loginUser(username, email)
+    fun userLogin(username: String, password: String) {
+        Log.i(TAG, "fun userLogin: running... username =$username email =$password")
+        ApiClient.getInstanceApiService().loginUser(username, password)
             .enqueue(object : Callback<SuccessLogin> {
                 override fun onResponse(
                     call: Call<SuccessLogin>,
