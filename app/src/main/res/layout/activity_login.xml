@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_username"
+        android:id="@+id/til_emailuser"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_nohp"
+        android:id="@+id/til_password"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_username">
+        app:layout_constraintTop_toBottomOf="@+id/til_emailuser">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_password"
@@ -84,7 +84,7 @@
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_nohp" />
+        app:layout_constraintTop_toBottomOf="@+id/til_password" />
 
     <TextView
         android:id="@+id/tv_dont_already_account"
