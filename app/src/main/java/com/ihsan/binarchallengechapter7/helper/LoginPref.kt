@@ -2,26 +2,31 @@ package com.ihsan.binarchallengechapter7.helper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 class LoginPref(context: Context) {
+    private val sharedPrefFile = "tokenlogin"
     companion object {
-        const val SP_NAME = "login_pref"
-        const val IS_LOGIN = "is_login"
+        const val LOGIN_KEY = "login_key"
+        const val TAG = "LoginPref"
     }
 
-    val sharedPreferences: SharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
 
-    fun setLoginPref(){
+    fun setLoginPref(token: String){
+        Log.i(TAG, "setLoginPref: token = $token")
         val prefEditor = sharedPreferences.edit()
-        prefEditor.putBoolean(IS_LOGIN, true)
+        prefEditor.putString(LOGIN_KEY, token)
         prefEditor.apply()
     }
 
-    fun getLoginPref():Boolean {
-        return true
+    fun getLoginPref(): String? {
+        Log.i(TAG, "getLoginPref...")
+        return sharedPreferences.getString(LOGIN_KEY, "tokenNull")
     }
 
     fun clearStatusLogin() {
+        Log.i(TAG, "clearStatusLogin...")
         val prefEditor = sharedPreferences.edit()
         prefEditor.clear()
         prefEditor.apply()

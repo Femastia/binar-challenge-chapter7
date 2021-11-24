@@ -1,6 +1,7 @@
 package com.ihsan.binarchallengechapter7
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.PatternMatcher
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.ihsan.binarchallengechapter7.databinding.ActivityLoginBinding
+import com.ihsan.binarchallengechapter7.helper.LoginPref
 import com.ihsan.binarchallengechapter7.viewmodel.MainViewModel
 import java.util.regex.Pattern
 
@@ -17,13 +19,14 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val TAG = LoginActivity::class.java.simpleName
+    private lateinit var loginPref: LoginPref
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val mainViewModel =
-            ViewModelProvider(this, defaultViewModelProviderFactory)[MainViewModel::class.java]
+        val mainViewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[MainViewModel::class.java]
+        loginPref = LoginPref(this)
 
         binding.btnLogin.setOnClickListener {
             Log.i(TAG, "btnLogin CLicked...")
@@ -41,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         //isSuccess true
         mainViewModel.successLogin.observe(this, {
             binding.progressBar.visibility = View.GONE
+            if (it.data?.token != null) loginPref.setLoginPref(it.data.token)
             Intent(this, MainActivity::class.java).also { intent ->
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
