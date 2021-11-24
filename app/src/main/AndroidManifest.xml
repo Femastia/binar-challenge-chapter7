@@ -11,6 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BinarChallengeChapter7">
+
+        <service
+            android:name=".utils.GameMusic"
+            android:enabled="true" />
+        <service
+            android:name=".utils.GamePlayMusic"
+            android:enabled="true" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
