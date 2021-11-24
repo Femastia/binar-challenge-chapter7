@@ -27,11 +27,15 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             Log.i(TAG, "btnLogin CLicked...")
+            binding.progressBar.visibility = View.VISIBLE
             val email = binding.edtEmail.text.toString().trim()
             val password = binding.edtPassword.text.toString().trim()
 
             mainViewModel.userLogin(email, password)
-            binding.progressBar.visibility = View.VISIBLE
+        }
+
+        binding.tvDontAlreadyAccount.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
 
         //isSuccess true
