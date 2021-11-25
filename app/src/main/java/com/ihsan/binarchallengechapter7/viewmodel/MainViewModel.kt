@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ihsan.binarchallengechapter7.model.BadRequestLogin
-import com.ihsan.binarchallengechapter7.model.ErrorsLoginRegister
-import com.ihsan.binarchallengechapter7.model.SuccessLogin
-import com.ihsan.binarchallengechapter7.model.SuccessRegister
+import com.ihsan.binarchallengechapter7.model.*
 import com.ihsan.binarchallengechapter7.network.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +15,7 @@ import retrofit2.Response
 class MainViewModel: ViewModel() {
 
     private val TAG = MainViewModel::class.java.simpleName
+    private val gson = Gson()
 
     //Login
     private val _successLogin = MutableLiveData<SuccessLogin>()
@@ -31,6 +29,21 @@ class MainViewModel: ViewModel() {
     val successRegis: LiveData<SuccessRegister> = _successRegis
     private val _unSuccessRegis = MutableLiveData<ErrorsLoginRegister>()
     val unSuccessRegis: LiveData<ErrorsLoginRegister> = _unSuccessRegis
+    //auth
+    private val _loginStatus = MutableLiveData<SuccessAuth>()
+    val loginStatus: LiveData<SuccessAuth> = _loginStatus
+    private val _errorLogin = MutableLiveData<ErrorAuth>()
+    val errorLogin: LiveData<ErrorAuth> = _errorLogin
+
+    //user
+    private val _getUser = MutableLiveData<ResponseUser>()
+    val getUser: LiveData<ResponseUser> = _getUser
+
+    //update User
+    private val _putuser = MutableLiveData<ResponsePut>()
+    val putUser: LiveData<ResponsePut> = _putuser
+    private val _errorUpdate = MutableLiveData<ErrorAuth>()
+    val errorUpdate: LiveData<ErrorAuth> = _errorUpdate
 
     fun userLogin(username: String, password: String) {
         Log.i(TAG, "fun userLogin: running... username =$username email =$password")
@@ -78,8 +91,78 @@ class MainViewModel: ViewModel() {
             })
     }
 
+    fun seasonLogin(token: String) {
+        Log.i(TAG, "seasonLogin: token = $token")
+        ApiClient.getInstanceApiService().authentication("Bearer $token")
+            .enqueue(object : Callback<SuccessAuth> {
+                override fun onResponse(call: Call<SuccessAuth>, response: Response<SuccessAuth>) {
+                    Log.i(TAG, "onResponse seasonLogin: $response")
+                    when(response.code()) {
+                        //Success
+                        200 -> _loginStatus.value = response.body()
+                        //Token is expired
+                        403 -> {
+                            val errorBody = response.errorBody() ?: return
+                            val type = object : TypeToken<ErrorAuth>() {}.type
+                            val errorsResponse: ErrorAuth = gson.fromJson(errorBody.charStream(), type)
+                            _errorLogin.value = errorsResponse
+                        }
+                        //Invalid Token
+                        401 -> {
+                            val errorBody = response.errorBody() ?: return
+                            val type = object : TypeToken<ErrorAuth>() {}.type
+                            val errorsResponse: ErrorAuth = gson.fromJson(errorBody.charStream(), type)
+                            _errorLogin.value = errorsResponse
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<SuccessAuth>, t: Throwable) {
+                    Log.i(TAG, "onFailure: ${t.message}")
+                }
+
+            })
+    }
+
+    fun getUser(token: String) {
+        ApiClient.getInstanceApiService().getuser("Bearer $token")
+            .enqueue(object : Callback<ResponseUser> {
+                override fun onResponse(call: Call<ResponseUser>, response: Response<ResponseUser>) {
+                    _getUser.value = response.body()
+                }
+
+                override fun onFailure(call: Call<ResponseUser>, t: Throwable) {
+                    Log.i(TAG, "onFailure getuser: ${t.message} ")
+                }
+            })
+    }
+
+    fun updateUser(token: String, dataPutUpdate: DataPutUpdate ) {
+        Log.i(TAG, "updateUser:$token\n$dataPutUpdate")
+        ApiClient.getInstanceApiService().updateUser("Bearer $token", dataPutUpdate)
+            .enqueue(object : Callback<ResponsePut> {
+                override fun onResponse(call: Call<ResponsePut>, response: Response<ResponsePut>) {
+                    Log.i(TAG, "onResponse updateuser: $response")
+                    if (response.code() == 200) {
+                        _putuser.value = response.body()
+                    } else {
+                        val errorUpdate = response.errorBody() ?: return
+                        val type = object : TypeToken<ErrorAuth>() {}.type
+                        val errorsResponse: ErrorAuth = gson.fromJson(errorUpdate.charStream(), type)
+                        _errorUpdate.value = errorsResponse
+                        Log.i(TAG, "onResponse updateuser !200:$errorsResponse")
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ResponsePut>, t: Throwable) {
+                    Log.i(TAG, "onFailure updateUser: ${t.message} ")
+                }
+
+            })
+    }
+
     private fun registerFalse(response: Response<SuccessRegister>) {
-        val gson = Gson()
         val errorBody = response.errorBody() ?: return
         val type = object : TypeToken<ErrorsLoginRegister>() {}.type
         val errorsResponse: ErrorsLoginRegister = gson.fromJson(errorBody.charStream(), type)
@@ -87,7 +170,6 @@ class MainViewModel: ViewModel() {
     }
 
     private fun loginFalse(response: Response<SuccessLogin>) {
-        val gson = Gson()
         val errorBody = response.errorBody() ?: return
         val type = object : TypeToken<ErrorsLoginRegister>() {}.type
         val errorsResponse: ErrorsLoginRegister = gson.fromJson(errorBody.charStream(), type)
@@ -95,7 +177,6 @@ class MainViewModel: ViewModel() {
     }
 
     private fun badRequest(response: Response<SuccessLogin>) {
-        val gson = Gson()
         val errorBody = response.errorBody() ?: return
         val type = object : TypeToken<BadRequestLogin>() {}.type
         val badRequestResponse: BadRequestLogin = gson.fromJson(errorBody.charStream(), type)

@@ -1,11 +1,9 @@
 package com.ihsan.binarchallengechapter7.network
 
-import com.ihsan.binarchallengechapter7.model.SuccessLogin
-import com.ihsan.binarchallengechapter7.model.SuccessRegister
+import com.ihsan.binarchallengechapter7.model.*
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
+import retrofit2.http.Body
 
 interface ApiService {
 
@@ -23,4 +21,20 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<SuccessLogin>
+
+    @GET("v1/auth/me")
+    fun authentication(
+        @Header("Authorization") token: String
+    ): Call<SuccessAuth>
+
+    @GET("v1/users")
+    fun getuser(
+        @Header("Authorization") token: String
+    ): Call<ResponseUser>
+
+    @PUT("v1/users")
+    fun updateUser(
+        @Header("Authorization") token: String,
+        @Body dataPutUpdate: DataPutUpdate
+    ): Call<ResponsePut>
 }
