@@ -1,11 +1,9 @@
 package com.ihsan.binarchallengechapter7.network
 
-import com.ihsan.binarchallengechapter7.model.ResponseUser
-import com.ihsan.binarchallengechapter7.model.SuccessAuth
-import com.ihsan.binarchallengechapter7.model.SuccessLogin
-import com.ihsan.binarchallengechapter7.model.SuccessRegister
+import com.ihsan.binarchallengechapter7.model.*
 import retrofit2.Call
 import retrofit2.http.*
+import retrofit2.http.Body
 
 interface ApiService {
 
@@ -33,4 +31,10 @@ interface ApiService {
     fun getuser(
         @Header("Authorization") token: String
     ): Call<ResponseUser>
+
+    @PUT("v1/users")
+    fun updateUser(
+        @Header("Authorization") token: String,
+        @Body dataPutUpdate: DataPutUpdate
+    ): Call<ResponsePut>
 }

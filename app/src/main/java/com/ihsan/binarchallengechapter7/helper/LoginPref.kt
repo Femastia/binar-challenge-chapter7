@@ -11,7 +11,7 @@ class LoginPref(context: Context) {
         const val TAG = "LoginPref"
     }
 
-    val sharedPreferences: SharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
 
     fun setLoginPref(token: String){
         Log.i(TAG, "setLoginPref: token = $token")

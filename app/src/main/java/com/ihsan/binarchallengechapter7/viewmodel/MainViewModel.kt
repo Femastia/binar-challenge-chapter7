@@ -39,6 +39,12 @@ class MainViewModel: ViewModel() {
     private val _getUser = MutableLiveData<ResponseUser>()
     val getUser: LiveData<ResponseUser> = _getUser
 
+    //update User
+    private val _putuser = MutableLiveData<ResponsePut>()
+    val putUser: LiveData<ResponsePut> = _putuser
+    private val _errorUpdate = MutableLiveData<ErrorAuth>()
+    val errorUpdate: LiveData<ErrorAuth> = _errorUpdate
+
     fun userLogin(username: String, password: String) {
         Log.i(TAG, "fun userLogin: running... username =$username email =$password")
         ApiClient.getInstanceApiService().loginUser(username, password)
@@ -121,15 +127,36 @@ class MainViewModel: ViewModel() {
     fun getUser(token: String) {
         ApiClient.getInstanceApiService().getuser("Bearer $token")
             .enqueue(object : Callback<ResponseUser> {
-                override fun onResponse(
-                    call: Call<ResponseUser>,
-                    response: Response<ResponseUser>
-                ) {
+                override fun onResponse(call: Call<ResponseUser>, response: Response<ResponseUser>) {
                     _getUser.value = response.body()
                 }
 
                 override fun onFailure(call: Call<ResponseUser>, t: Throwable) {
                     Log.i(TAG, "onFailure getuser: ${t.message} ")
+                }
+            })
+    }
+
+    fun updateUser(token: String, dataPutUpdate: DataPutUpdate ) {
+        Log.i(TAG, "updateUser:$token\n$dataPutUpdate")
+        ApiClient.getInstanceApiService().updateUser("Bearer $token", dataPutUpdate)
+            .enqueue(object : Callback<ResponsePut> {
+                override fun onResponse(call: Call<ResponsePut>, response: Response<ResponsePut>) {
+                    Log.i(TAG, "onResponse updateuser: $response")
+                    if (response.code() == 200) {
+                        _putuser.value = response.body()
+                    } else {
+                        val errorUpdate = response.errorBody() ?: return
+                        val type = object : TypeToken<ErrorAuth>() {}.type
+                        val errorsResponse: ErrorAuth = gson.fromJson(errorUpdate.charStream(), type)
+                        _errorUpdate.value = errorsResponse
+                        Log.i(TAG, "onResponse updateuser !200:$errorsResponse")
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ResponsePut>, t: Throwable) {
+                    Log.i(TAG, "onFailure updateUser: ${t.message} ")
                 }
 
             })

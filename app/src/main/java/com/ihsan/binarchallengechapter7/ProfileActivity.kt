@@ -34,12 +34,7 @@ class ProfileActivity : AppCompatActivity() {
         })
 
         binding.tvEditUser.setOnClickListener {
-            
+            startActivity(Intent(this, UpdateUserActivity::class.java))
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
 }
