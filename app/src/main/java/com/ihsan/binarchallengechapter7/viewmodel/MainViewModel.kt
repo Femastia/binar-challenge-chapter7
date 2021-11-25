@@ -35,6 +35,10 @@ class MainViewModel: ViewModel() {
     private val _errorLogin = MutableLiveData<ErrorAuth>()
     val errorLogin: LiveData<ErrorAuth> = _errorLogin
 
+    //user
+    private val _getUser = MutableLiveData<ResponseUser>()
+    val getUser: LiveData<ResponseUser> = _getUser
+
     fun userLogin(username: String, password: String) {
         Log.i(TAG, "fun userLogin: running... username =$username email =$password")
         ApiClient.getInstanceApiService().loginUser(username, password)
@@ -109,6 +113,23 @@ class MainViewModel: ViewModel() {
 
                 override fun onFailure(call: Call<SuccessAuth>, t: Throwable) {
                     Log.i(TAG, "onFailure: ${t.message}")
+                }
+
+            })
+    }
+
+    fun getUser(token: String) {
+        ApiClient.getInstanceApiService().getuser("Bearer $token")
+            .enqueue(object : Callback<ResponseUser> {
+                override fun onResponse(
+                    call: Call<ResponseUser>,
+                    response: Response<ResponseUser>
+                ) {
+                    _getUser.value = response.body()
+                }
+
+                override fun onFailure(call: Call<ResponseUser>, t: Throwable) {
+                    Log.i(TAG, "onFailure getuser: ${t.message} ")
                 }
 
             })

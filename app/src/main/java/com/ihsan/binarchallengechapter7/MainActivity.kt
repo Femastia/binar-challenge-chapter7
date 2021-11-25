@@ -3,6 +3,7 @@ package com.ihsan.binarchallengechapter7
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.lifecycle.ViewModelProvider
 import com.ihsan.binarchallengechapter7.databinding.ActivityMainBinding
 import com.ihsan.binarchallengechapter7.helper.LoginPref
@@ -35,6 +36,10 @@ class MainActivity : AppCompatActivity() {
                 it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(it)
             }
+        }
+
+        binding.imgUser.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 

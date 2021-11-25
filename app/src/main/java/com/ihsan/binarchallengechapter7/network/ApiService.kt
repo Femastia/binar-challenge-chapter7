@@ -1,5 +1,6 @@
 package com.ihsan.binarchallengechapter7.network
 
+import com.ihsan.binarchallengechapter7.model.ResponseUser
 import com.ihsan.binarchallengechapter7.model.SuccessAuth
 import com.ihsan.binarchallengechapter7.model.SuccessLogin
 import com.ihsan.binarchallengechapter7.model.SuccessRegister
@@ -27,4 +28,9 @@ interface ApiService {
     fun authentication(
         @Header("Authorization") token: String
     ): Call<SuccessAuth>
+
+    @GET("v1/users")
+    fun getuser(
+        @Header("Authorization") token: String
+    ): Call<ResponseUser>
 }

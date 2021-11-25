@@ -111,7 +111,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/img_list_user"
+            android:id="@+id/img_user"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_marginTop="32dp"
@@ -134,7 +134,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_list_user" />
+            app:layout_constraintTop_toBottomOf="@+id/img_user" />
 
         <TextView
             android:id="@+id/tv_keluar"
