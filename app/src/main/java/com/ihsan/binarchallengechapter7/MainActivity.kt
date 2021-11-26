@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.ihsan.binarchallengechapter7.databinding.ActivityMainBinding
 import com.ihsan.binarchallengechapter7.helper.LoginPref
 import com.ihsan.binarchallengechapter7.utils.GameMusic
+import com.ihsan.binarchallengechapter7.video.VideoActivity
 import com.ihsan.binarchallengechapter7.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.imgUser.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
+        }
+
+        binding.imgVidTutorial.setOnClickListener {
+            startActivity(Intent(this, VideoActivity::class.java))
         }
     }
 
