@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.ihsan.binarchallengechapter7.databinding.ActivityProfileBinding
 import com.ihsan.binarchallengechapter7.helper.HistoryAdapter
@@ -41,6 +42,8 @@ class ProfileActivity : AppCompatActivity() {
         //history
         mainViewModel.responseHistory.observe(this, {
             adapter = HistoryAdapter(it)
+            binding.rvHistory.layoutManager =LinearLayoutManager(this)
+            binding.rvHistory.adapter = adapter
         })
 
         binding.tvEditUser.setOnClickListener {
