@@ -7,4 +7,6 @@
     <string name="already_have_an_account">Sudah punya akun? Masuk</string>
     <string name="register">Register</string>
     <string name="daftar">DAFTAR</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

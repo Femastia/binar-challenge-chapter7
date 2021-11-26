@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="LightCyan">#E0FFFF</color>
     <color name="Blue">#0000FF</color>
+    <color name="text_color">#70002EA3</color>
+    <color name="purple">#A05FEF</color>
+    <color name="yellow">#FF9800</color>
+    <color name="bg_choice">#70757575</color>
 </resources>

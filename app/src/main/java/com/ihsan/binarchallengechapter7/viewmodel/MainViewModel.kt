@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.ihsan.binarchallengechapter7.helper.LoginPref
 import com.ihsan.binarchallengechapter7.model.*
 import com.ihsan.binarchallengechapter7.network.ApiClient
 import retrofit2.Call
@@ -44,6 +45,18 @@ class MainViewModel: ViewModel() {
     val putUser: LiveData<ResponsePut> = _putuser
     private val _errorUpdate = MutableLiveData<ErrorAuth>()
     val errorUpdate: LiveData<ErrorAuth> = _errorUpdate
+
+    //game battle
+    private val _responseBattle = MutableLiveData<ResponseGameBattle>()
+    val responseBattle: LiveData<ResponseGameBattle> = _responseBattle
+    private val _errorBattle = MutableLiveData<ErrorAuth>()
+    val errorBattle: LiveData<ErrorAuth> = _errorBattle
+
+    //game history
+    private val _responseHistory = MutableLiveData<ArrayList<DataItem>>()
+    val responseHistory: LiveData<ArrayList<DataItem>> = _responseHistory
+    private val _errorBattleHistory = MutableLiveData<ErrorAuth>()
+    val errorBattleHistory: LiveData<ErrorAuth> = _errorBattleHistory
 
     fun userLogin(username: String, password: String) {
         Log.i(TAG, "fun userLogin: running... username =$username email =$password")
@@ -157,6 +170,56 @@ class MainViewModel: ViewModel() {
 
                 override fun onFailure(call: Call<ResponsePut>, t: Throwable) {
                     Log.i(TAG, "onFailure updateUser: ${t.message} ")
+                }
+
+            })
+    }
+
+    fun gameBattle(token: String, mode: String, result: String) {
+        Log.i(TAG, "gameBattle: $token\n$mode $result")
+        ApiClient.getInstanceApiService().gameBattle("Bearer $token", mode, result)
+            .enqueue(object : Callback<ResponseGameBattle> {
+                override fun onResponse(
+                    call: Call<ResponseGameBattle>,
+                    response: Response<ResponseGameBattle>
+                ) {
+                    Log.i(TAG, "onResponse gameBattle: $response")
+                    if (response.code() == 200){
+                        _responseBattle.value = response.body()
+                    }else {
+                        val errorBattle = response.errorBody() ?: return
+                        val type = object : TypeToken<ErrorAuth>() {}.type
+                        val errorsResponse: ErrorAuth = gson.fromJson(errorBattle.charStream(), type)
+                        _errorBattle.value = errorsResponse
+                        Log.i(TAG, "onResponse gameBattle !200:$errorsResponse ")
+                    }
+                }
+                override fun onFailure(call: Call<ResponseGameBattle>, t: Throwable) {
+                    Log.i(TAG, "onFailure gameBattle:${t.message}")
+                }
+            })
+    }
+
+    fun getBattleHistory(token: String) {
+        ApiClient.getInstanceApiService().getBattle("Bearer $token")
+            .enqueue(object : Callback<ResponseGetBattle> {
+                override fun onResponse(
+                    call: Call<ResponseGetBattle>,
+                    response: Response<ResponseGetBattle>
+                ) {
+                    Log.i(TAG, "onResponse getBattleHistory:$response")
+                    if (response.code() == 200) {
+                        _responseHistory.value = response.body()?.data as ArrayList<DataItem>?
+                    } else {
+                        val errorBattleHistory = response.errorBody() ?: return
+                        val type = object : TypeToken<ErrorAuth>() {}.type
+                        val errorsResponse: ErrorAuth = gson.fromJson(errorBattleHistory.charStream(), type)
+                        _errorBattleHistory.value = errorsResponse
+                        Log.i(TAG, "onResponse getBattleHistory !200:$errorsResponse ")
+                    }
+                }
+                override fun onFailure(call: Call<ResponseGetBattle>, t: Throwable) {
+                    Log.i(TAG, "onFailure getBattleHistory:${t.message}")
                 }
 
             })

@@ -48,21 +48,7 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Name"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" Vs "
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pemain 2"
+                android:text="Multiplayer"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -91,21 +77,7 @@
                 android:id="@+id/tv_name_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Name"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" Vs "
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="COM"
+                android:text="Singleplayer"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>

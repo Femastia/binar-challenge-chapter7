@@ -37,4 +37,15 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body dataPutUpdate: DataPutUpdate
     ): Call<ResponsePut>
+
+    @FormUrlEncoded
+    @POST("v1/battle")
+    fun gameBattle(
+        @Header("Authorization") token: String,
+        @Field("mode") mode: String,
+        @Field("result") result: String
+    ): Call<ResponseGameBattle>
+
+    @GET("v1/battle")
+    fun getBattle(@Header("Authorization") token: String): Call<ResponseGetBattle>
 }

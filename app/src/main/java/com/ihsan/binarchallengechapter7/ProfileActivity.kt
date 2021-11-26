@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.ihsan.binarchallengechapter7.databinding.ActivityProfileBinding
+import com.ihsan.binarchallengechapter7.helper.HistoryAdapter
 import com.ihsan.binarchallengechapter7.helper.LoginPref
 import com.ihsan.binarchallengechapter7.viewmodel.MainViewModel
 
@@ -14,6 +15,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
     private lateinit var loginPref: LoginPref
+    private lateinit var adapter: HistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +24,11 @@ class ProfileActivity : AppCompatActivity() {
 
         val mainViewModel = ViewModelProvider(this, defaultViewModelProviderFactory)[MainViewModel::class.java]
         loginPref = LoginPref(this)
+
         mainViewModel.getUser(loginPref.getLoginPref().toString())
+        mainViewModel.getBattleHistory(loginPref.getLoginPref().toString())
         binding.progressBar.visibility = View.VISIBLE
+        //profile
         mainViewModel.getUser.observe(this, {
             binding.progressBar.visibility = View.GONE
             Glide.with(this)
@@ -31,6 +36,11 @@ class ProfileActivity : AppCompatActivity() {
                 .into(binding.imgProfile)
             binding.tvUsername.text = it.data?.username
             binding.tvEmailuser.text = it.data?.email
+        })
+
+        //history
+        mainViewModel.responseHistory.observe(this, {
+            adapter = HistoryAdapter(it)
         })
 
         binding.tvEditUser.setOnClickListener {
